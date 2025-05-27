@@ -1,0 +1,53 @@
+import unittest
+import pygame
+import game_module 
+
+class TestGame(unittest.TestCase):
+
+    def setUp(self):
+        pygame.init()
+        self.display = pygame.display.set_mode((game_module.display_width, game_module.display_height))
+
+    def tearDown(self):
+        pygame.quit()
+
+    def test_pig_initial_position(self):
+        ##  test that the pig is in the correct position
+        x = game_module.display_width * 0.45
+        y = game_module.display_height * 0.8
+        self.assertEqual(x, 360)
+        self.assertEqual(y, 480)
+
+    def test_images_loaded(self):
+        #  test that all images are loaded successfully
+        self.assertEqual(len(game_module.images), 10)
+        for image in game_module.images:
+            self.assertIsInstance(image, pygame.Surface)
+
+    def test_pig_blit(self):
+        # test that the pig function correctly displays the image of the pig on the screen
+        x, y = 100, 100
+        game_module.pig(x, y)
+        pygame.display.flip()  # We will refresh the page to reflect the changes
+
+    def test_button_functionality(self):
+        # test that the game buttons work correctly
+        def mock_action():
+            return "Button Pressed"
+
+        result = game_module.button("Test", 150, 450, 100, 50, game_module.bright_pink, game_module.mypink, mock_action)
+        self.assertIsNone(result)  # check that the result of the function is None (because we are actually displaying it on the screen).
+
+    def test_things_dodged_display(self):
+        # test that the score counter is displayed correctly
+        count = 5
+        game_module.things_dodged(count)
+        pygame.display.flip()
+
+    def test_crash_function(self):
+        # test that the crash function correctly shows the loss of the game
+        game_module.crash()
+        pygame.display.flip()
+
+if name == 'main':
+    unittest.main()
